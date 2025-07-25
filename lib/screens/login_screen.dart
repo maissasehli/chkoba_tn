@@ -1,3 +1,4 @@
+import 'package:chkoba_tn/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -110,6 +111,10 @@ class _ChkobaLoginPageState extends State<ChkobaLoginPage>
 
     setState(() {
       _isLoading = true;
+      Navigator.pushReplacement(
+  context, 
+  MaterialPageRoute(builder: (context) => const ChkobaHomePage())
+);
     });
 
     // Simulation d'une connexion
@@ -124,6 +129,11 @@ class _ChkobaLoginPageState extends State<ChkobaLoginPage>
     
     // Ici vous pouvez naviguer vers votre page principale
     // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ChkobaGamePage()));
+  }
+
+  Future<void> _handleSocialLogin(String provider) async {
+    _showErrorSnackBar('Connexion avec $provider en cours de développement');
+    // Ici vous pouvez implémenter la logique de connexion sociale
   }
 
   void _showErrorSnackBar(String message) {
@@ -425,6 +435,16 @@ class _ChkobaLoginPageState extends State<ChkobaLoginPage>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Boutons de connexion sociale
+          _buildSocialLoginButtons(),
+          
+          const SizedBox(height: 24),
+          
+          // Séparateur "OU"
+          _buildDivider(),
+          
+          const SizedBox(height: 24),
+          
           // Champ nom d'utilisateur
           _buildTextField(
             controller: _usernameController,
@@ -459,6 +479,144 @@ class _ChkobaLoginPageState extends State<ChkobaLoginPage>
           _buildAdditionalLinks(),
         ],
       ),
+    );
+  }
+
+  Widget _buildSocialLoginButtons() {
+    return Column(
+      children: [
+        // Bouton Facebook
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton.icon(
+            onPressed: () => _handleSocialLogin('Facebook'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF1877F2),
+              foregroundColor: Colors.white,
+              elevation: 4,
+              shadowColor: const Color(0xFF1877F2).withOpacity(0.3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            icon: Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: const Center(
+                child: Text(
+                  'f',
+                  style: TextStyle(
+                    color: Color(0xFF1877F2),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            label: const Text(
+              'Continuer avec Facebook',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+        
+        const SizedBox(height: 12),
+        
+        // Bouton Google
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: OutlinedButton.icon(
+            onPressed: () => _handleSocialLogin('Google'),
+            style: OutlinedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black87,
+              side: BorderSide(color: Colors.grey.shade300, width: 1),
+              elevation: 2,
+              shadowColor: Colors.black12,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            icon: Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Image.network(
+                'https://developers.google.com/identity/images/g-logo.png',
+                width: 20,
+                height: 20,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'G',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            label: const Text(
+              'Continuer avec Google',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDivider() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 1,
+            color: Colors.grey.shade300,
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            'OU',
+            style: TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            height: 1,
+            color: Colors.grey.shade300,
+          ),
+        ),
+      ],
     );
   }
 

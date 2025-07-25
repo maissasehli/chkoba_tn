@@ -1,9 +1,7 @@
 import 'package:chkoba_tn/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:math' as math;
-
-// Import de la page de connexion
-// import 'chkoba_login_page.dart'; // Décommentez cette ligne dans votre projet
 
 class ChkobaSplashScreen extends StatefulWidget {
   const ChkobaSplashScreen({Key? key}) : super(key: key);
@@ -34,6 +32,12 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
   @override
   void initState() {
     super.initState();
+    
+    // Forcer l'orientation horizontale
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     
     // Animation controllers
     _fadeController = AnimationController(
@@ -139,41 +143,65 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
             // Éléments décoratifs de fond
             ..._buildBackgroundDecorations(),
             
-            // Contenu principal
-            Center(
-              child: FadeTransition(
-                opacity: _fadeAnimation,
-                child: SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, 0.3),
-                    end: Offset.zero,
-                  ).animate(_fadeAnimation),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Logo avec cartes animées
-                      _buildAnimatedCards(),
-                      
-                      const SizedBox(height: 40),
-                      
-                      // Titre principal
-                      _buildTitle(),
-                      
-                      const SizedBox(height: 15),
-                      
-                      // Sous-titre
-                      _buildSubtitle(),
-                      
-                      const SizedBox(height: 60),
-                      
-                      // Barre de progression
-                      _buildProgressBar(),
-                      
-                      const SizedBox(height: 20),
-                      
-                      // Texte de chargement
-                      _buildLoadingText(),
-                    ],
+            // Contenu principal - Utilisation d'un SingleChildScrollView pour éviter l'overflow
+            SafeArea(
+              child: Center(
+                child: FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 0.3),
+                      end: Offset.zero,
+                    ).animate(_fadeAnimation),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        // Adapter la mise en page selon l'espace disponible
+                        bool isCompact = constraints.maxHeight < 500;
+                        
+                        return SingleChildScrollView(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: constraints.maxHeight,
+                            ),
+                            child: IntrinsicHeight(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Espacement flexible
+                                  const Spacer(flex: 1),
+                                  
+                                  // Logo avec cartes animées (taille réduite en mode compact)
+                                  _buildAnimatedCards(isCompact: isCompact),
+                                  
+                                  SizedBox(height: isCompact ? 20 : 30),
+                                  
+                                  // Titre principal (taille réduite en mode compact)
+                                  _buildTitle(isCompact: isCompact),
+                                  
+                                  SizedBox(height: isCompact ? 8 : 12),
+                                  
+                                  // Sous-titre
+                                  _buildSubtitle(isCompact: isCompact),
+                                  
+                                  SizedBox(height: isCompact ? 30 : 40),
+                                  
+                                  // Barre de progression
+                                  _buildProgressBar(),
+                                  
+                                  SizedBox(height: isCompact ? 12 : 16),
+                                  
+                                  // Texte de chargement
+                                  _buildLoadingText(isCompact: isCompact),
+                                  
+                                  // Espacement flexible
+                                  const Spacer(flex: 1),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -186,33 +214,15 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
 
   List<Widget> _buildBackgroundDecorations() {
     return [
-      // Étoiles scintillantes
+      // Étoiles scintillantes (positions adaptées au mode paysage)
       Positioned(
-        top: 80,
+        top: 60,
         left: 50,
         child: AnimatedBuilder(
           animation: _sparkleAnimation,
           builder: (context, child) {
             return Transform.scale(
               scale: 1 + 0.3 * math.sin(_sparkleAnimation.value * 2 * math.pi),
-              child: const Icon(
-                Icons.star,
-                color: Color(0x33FFD700),
-                size: 30,
-              ),
-            );
-          },
-        ),
-      ),
-      
-      Positioned(
-        top: 150,
-        right: 70,
-        child: AnimatedBuilder(
-          animation: _sparkleAnimation,
-          builder: (context, child) {
-            return Transform.scale(
-              scale: 1 + 0.3 * math.sin(_sparkleAnimation.value * 2 * math.pi + 1),
               child: const Icon(
                 Icons.star,
                 color: Color(0x33FFD700),
@@ -224,13 +234,13 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
       ),
       
       Positioned(
-        bottom: 200,
-        left: 80,
+        top: 100,
+        right: 70,
         child: AnimatedBuilder(
           animation: _sparkleAnimation,
           builder: (context, child) {
             return Transform.scale(
-              scale: 1 + 0.3 * math.sin(_sparkleAnimation.value * 2 * math.pi + 2),
+              scale: 1 + 0.3 * math.sin(_sparkleAnimation.value * 2 * math.pi + 1),
               child: const Icon(
                 Icons.star,
                 color: Color(0x33FFD700),
@@ -241,9 +251,27 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
         ),
       ),
       
+      Positioned(
+        bottom: 80,
+        left: 80,
+        child: AnimatedBuilder(
+          animation: _sparkleAnimation,
+          builder: (context, child) {
+            return Transform.scale(
+              scale: 1 + 0.3 * math.sin(_sparkleAnimation.value * 2 * math.pi + 2),
+              child: const Icon(
+                Icons.star,
+                color: Color(0x33FFD700),
+                size: 18,
+              ),
+            );
+          },
+        ),
+      ),
+      
       // Croissant décoratif
       Positioned(
-        top: 120,
+        top: 80,
         right: 100,
         child: AnimatedBuilder(
           animation: _sparkleController,
@@ -251,14 +279,14 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
             return Transform.rotate(
               angle: _sparkleController.value * 2 * math.pi,
               child: Container(
-                width: 40,
-                height: 40,
+                width: 35,
+                height: 35,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
                       color: const Color(0x22FFD700),
-                      offset: const Offset(8, 8),
+                      offset: const Offset(6, 6),
                       blurRadius: 0,
                     ),
                   ],
@@ -271,10 +299,15 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
     ];
   }
 
-  Widget _buildAnimatedCards() {
+  Widget _buildAnimatedCards({bool isCompact = false}) {
+    double cardWidth = isCompact ? 70 : 85;
+    double cardHeight = isCompact ? 105 : 130;
+    double containerWidth = isCompact ? 120 : 140;
+    double containerHeight = isCompact ? 140 : 180;
+    
     return SizedBox(
-      width: 140,
-      height: 180,
+      width: containerWidth,
+      height: containerHeight,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -284,12 +317,16 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
             builder: (context, child) {
               return Transform.translate(
                 offset: Offset(
-                  -15,
-                  3 * math.sin(_cardAnimation.value * 2 * math.pi) - 8,
+                  -12,
+                  3 * math.sin(_cardAnimation.value * 2 * math.pi) - 6,
                 ),
                 child: Transform.rotate(
                   angle: -0.15 + 0.03 * math.sin(_cardAnimation.value * 2 * math.pi),
-                  child: _buildRealisticCard(isBack: true),
+                  child: _buildRealisticCard(
+                    isBack: true, 
+                    width: cardWidth, 
+                    height: cardHeight
+                  ),
                 ),
               );
             },
@@ -301,12 +338,18 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
             builder: (context, child) {
               return Transform.translate(
                 offset: Offset(
-                  -5,
-                  5 * math.sin(_cardAnimation.value * 2 * math.pi + 1) - 4,
+                  -4,
+                  4 * math.sin(_cardAnimation.value * 2 * math.pi + 1) - 3,
                 ),
                 child: Transform.rotate(
                   angle: -0.05 + 0.03 * math.sin(_cardAnimation.value * 2 * math.pi + 1),
-                  child: _buildRealisticCard(symbol: '♦', symbolColor: const Color(0xFFE31E24)),
+                  child: _buildRealisticCard(
+                    symbol: '♦', 
+                    symbolColor: const Color(0xFFE31E24),
+                    width: cardWidth, 
+                    height: cardHeight,
+                    fontSize: isCompact ? 24 : 28,
+                  ),
                 ),
               );
             },
@@ -318,12 +361,18 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
             builder: (context, child) {
               return Transform.translate(
                 offset: Offset(
-                  5,
-                  6 * math.sin(_cardAnimation.value * 2 * math.pi + 2),
+                  4,
+                  5 * math.sin(_cardAnimation.value * 2 * math.pi + 2),
                 ),
                 child: Transform.rotate(
                   angle: 0.08 + 0.03 * math.sin(_cardAnimation.value * 2 * math.pi + 2),
-                  child: _buildRealisticCard(symbol: '♥', symbolColor: const Color(0xFFE31E24)),
+                  child: _buildRealisticCard(
+                    symbol: '♥', 
+                    symbolColor: const Color(0xFFE31E24),
+                    width: cardWidth, 
+                    height: cardHeight,
+                    fontSize: isCompact ? 24 : 28,
+                  ),
                 ),
               );
             },
@@ -333,10 +382,17 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
     );
   }
 
-  Widget _buildRealisticCard({String? symbol, Color? symbolColor, bool isBack = false}) {
+  Widget _buildRealisticCard({
+    String? symbol, 
+    Color? symbolColor, 
+    bool isBack = false,
+    double width = 85,
+    double height = 130,
+    double fontSize = 28,
+  }) {
     return Container(
-      width: 85,
-      height: 130,
+      width: width,
+      height: height,
       decoration: BoxDecoration(
         color: isBack ? Colors.grey.shade100 : Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -344,22 +400,15 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
           // Ombre principale
           BoxShadow(
             color: Colors.black.withOpacity(0.25),
-            offset: const Offset(0, 8),
-            blurRadius: 16,
+            offset: const Offset(0, 6),
+            blurRadius: 12,
             spreadRadius: 0,
           ),
           // Ombre secondaire pour plus de profondeur
           BoxShadow(
             color: Colors.black.withOpacity(0.15),
-            offset: const Offset(0, 4),
-            blurRadius: 8,
-            spreadRadius: 0,
-          ),
-          // Ombre douce pour l'effet 3D
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            offset: const Offset(0, 2),
-            blurRadius: 4,
+            offset: const Offset(0, 3),
+            blurRadius: 6,
             spreadRadius: 0,
           ),
         ],
@@ -375,7 +424,7 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
               ? Text(
                   symbol,
                   style: TextStyle(
-                    fontSize: 32,
+                    fontSize: fontSize,
                     fontWeight: FontWeight.bold,
                     color: symbolColor ?? Colors.black,
                   ),
@@ -385,18 +434,18 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
     );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle({bool isCompact = false}) {
     return ShaderMask(
       shaderCallback: (bounds) => const LinearGradient(
         colors: [Colors.white, Color(0xFFFFD700)],
       ).createShader(bounds),
-      child: const Text(
+      child: Text(
         'CHKOBA',
         style: TextStyle(
-          fontSize: 48,
+          fontSize: isCompact ? 36 : 42,
           fontWeight: FontWeight.bold,
           color: Colors.white,
-          shadows: [
+          shadows: const [
             Shadow(
               offset: Offset(2, 2),
               blurRadius: 8,
@@ -408,14 +457,14 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
     );
   }
 
-  Widget _buildSubtitle() {
-    return const Text(
+  Widget _buildSubtitle({bool isCompact = false}) {
+    return Text(
       'Jeu de Cartes Tunisien Traditionnel',
       style: TextStyle(
-        fontSize: 16,
-        color: Color(0xFFFFD700),
+        fontSize: isCompact ? 12 : 14,
+        color: const Color(0xFFFFD700),
         fontWeight: FontWeight.w500,
-        shadows: [
+        shadows: const [
           Shadow(
             offset: Offset(1, 1),
             blurRadius: 4,
@@ -429,11 +478,11 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
 
   Widget _buildProgressBar() {
     return SizedBox(
-      width: 250,
+      width: 200,
       child: Column(
         children: [
           Container(
-            height: 6,
+            height: 5,
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.3),
               borderRadius: BorderRadius.circular(10),
@@ -461,19 +510,18 @@ class _ChkobaSplashScreenState extends State<ChkobaSplashScreen>
     );
   }
 
-  Widget _buildLoadingText() {
+  Widget _buildLoadingText({bool isCompact = false}) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       child: Text(
         _loadingText,
         key: ValueKey(_loadingText),
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.white,
-          fontSize: 16,
+          fontSize: isCompact ? 13 : 15,
           fontWeight: FontWeight.w400,
         ),
       ),
     );
   }
 }
-
