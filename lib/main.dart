@@ -1,4 +1,5 @@
 import 'package:chkoba_tn/features/auth/presentation/controllers/pages/login_page.dart';
+import 'package:chkoba_tn/features/home/home_screen.dart';
 import 'package:chkoba_tn/features/splash/presentation/pages/splash_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,7 +53,7 @@ class ChkobaApp extends StatelessWidget {
       routes: {
         '/': (context) => const SplashPage(),
         '/login': (context) => const LoginPage(),
-        '/home': (context) => const Placeholder(), // À implémenter
+        '/home': (context) => const ChkobaHomePage(), 
       },
     );
   }
