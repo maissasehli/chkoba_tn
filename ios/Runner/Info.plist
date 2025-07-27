@@ -5,7 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>Chkoba Tn</string>
+		<string>Chkoba TN</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
@@ -28,24 +28,110 @@
 		<string>LaunchScreen</string>
 		<key>UIMainStoryboardFile</key>
 		<string>Main</string>
+		
+		<!-- Configuration des orientations supportées pour iPhone -->
 		<key>UISupportedInterfaceOrientations</key>
 		<array>
-			<string>UIInterfaceOrientationPortrait</string>
 			<string>UIInterfaceOrientationLandscapeLeft</string>
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
+		
+		<!-- Configuration des orientations supportées pour iPad -->
 		<key>UISupportedInterfaceOrientations~ipad</key>
 		<array>
-			<string>UIInterfaceOrientationPortrait</string>
-			<string>UIInterfaceOrientationPortraitUpsideDown</string>
 			<string>UIInterfaceOrientationLandscapeLeft</string>
 			<string>UIInterfaceOrientationLandscapeRight</string>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		</array>
+		
+		<!-- Configuration des URL schemes pour Google OAuth -->
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleURLName</key>
+				<string>chkoba-tn-google-auth</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<!-- Remplacez par votre bundle ID -->
+					<string>com.example.chkoba-tn</string>
+				</array>
+			</dict>
+			<dict>
+				<key>CFBundleURLName</key>
+				<string>google-oauth</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<!-- Client ID iOS de Google -->
+					<string>477072394253-afq0np2gnlka9cje82q06p817h1hn4vk.apps.googleusercontent.com</string>
+				</array>
+			</dict>
+			<dict>
+				<key>CFBundleURLName</key>
+				<string>supabase-auth</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<!-- Scheme pour Supabase Auth -->
+					<string>com.example.chkoba-tn</string>
+				</array>
+			</dict>
+		</array>
+		
+		<!-- Permissions réseau et sécurité -->
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<false/>
+			<key>NSExceptionDomains</key>
+			<dict>
+				<key>supabase.co</key>
+				<dict>
+					<key>NSIncludesSubdomains</key>
+					<true/>
+					<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+					<true/>
+					<key>NSTemporaryExceptionMinimumTLSVersion</key>
+					<string>TLSv1.0</string>
+				</dict>
+				<key>googleapis.com</key>
+				<dict>
+					<key>NSIncludesSubdomains</key>
+					<true/>
+					<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+					<true/>
+				</dict>
+			</dict>
+		</dict>
+		
+		<!-- Descriptions des permissions pour l'utilisateur -->
+		<key>NSCameraUsageDescription</key>
+		<string>Cette application utilise la caméra pour prendre des photos de profil.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Cette application accède aux photos pour choisir une photo de profil.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Cette application peut utiliser le microphone pour les fonctionnalités de jeu.</string>
+		
+		<!-- Configuration des performances -->
 		<key>CADisableMinimumFrameDurationOnPhone</key>
 		<true/>
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
+		
+		<!-- Configuration de la barre d'état -->
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false/>
+		
+		<!-- Configuration pour le mode paysage par défaut -->
+		<key>UIInterfaceOrientation</key>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		
+		<!-- Autoriser l'utilisation en arrière-plan pour l'auth -->
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>background-processing</string>
+		</array>
+		
 	</dict>
 </plist>

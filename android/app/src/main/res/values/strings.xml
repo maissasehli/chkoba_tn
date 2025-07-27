@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- android/app/src/main/res/values/strings.xml -->
+<resources>
+    <!-- Nom de l'application -->
+    <string name="app_name">Chkoba TN</string>
+    
+    <!-- Client ID Web de Google pour l'authentification -->
+    <string name="default_web_client_id">477072394253-q9necinvnvpfouh3nb26lr46lgad0uh9.apps.googleusercontent.com</string>
+    
+    <!-- URL de base Supabase -->
+    <string name="supabase_url">https://nasjiocfbhyvuwekepnx.supabase.co</string>
+    
+    <!-- Messages d'erreur -->
+    <string name="auth_error_generic">Erreur d\'authentification</string>
+    <string name="auth_error_network">Problème de connexion réseau</string>
+    <string name="auth_error_cancelled">Authentification annulée</string>
+    
+    <!-- Messages de succès -->
+    <string name="auth_success">Connexion réussie</string>
+    <string name="logout_success">Déconnexion réussie</string>
+    
+</resources>

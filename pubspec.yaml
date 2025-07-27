@@ -43,6 +43,15 @@ flutter_native_splash:
   web: false
 
 dev_dependencies:
+  supabase_flutter: ^2.0.0
+  
+  # Google Sign In
+  google_sign_in: ^6.1.5
+  get: ^4.6.6
+  
+  # Pour iOS spécifiquement (optionnel)
+  google_sign_in_ios: ^5.6.4
+  
   flutter_test:
     sdk: flutter
 
